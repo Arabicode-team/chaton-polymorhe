@@ -4,8 +4,10 @@
   <% @cart.line_items.each do |line_item| %>
     <div>
       <p><%= line_item.photo.title %>: <%= number_to_currency(line_item.price) %></p>
-      <%= button_to 'Remove', cart_remove_from_path(line_item_id: line_item.id), method: :delete %>
-      </div>
+      <%= form_with url: cart_cart_remove_from_path(cart_id: @cart.id, line_item_id: line_item.id), method: :delete do |f| %>
+        <%= f.submit "Remove" %>
+      <% end %>
+    </div>
   <% end %>
 
   <div>
