@@ -1,5 +1,5 @@
 <p style="color: green"><%= notice %></p>
-
+<% total_price = @cart.line_items.sum { |item| item.price } %>
 <% if @cart.line_items.any? %>
   <% @cart.line_items.each do |line_item| %>
     <div>
@@ -9,7 +9,7 @@
       <% end %>
     </div>
   <% end %>
-
+  <p>Total Price: <%= number_to_currency(total_price) %></p>
   <div>
     <%= link_to 'Checkout', new_order_path, method: :post %>
   </div>

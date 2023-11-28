@@ -12,7 +12,8 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
-    @order = Order.new
+    @cart = current_user.cart
+    @total_price = @cart.line_items.sum('price * quantity')
   end
 
   # GET /orders/1/edit
@@ -57,12 +58,34 @@ class OrdersController < ApplicationController
     end
   end
 
+  def charge
+    amount_in_cents = (params[:amount].to_f * 100).to_i
+    # Создание платежа через Stripe
+    charge = Stripe::Charge.create({
+      amount: amount_in_cents, # Убедитесь, что это в центах!
+      currency: 'usd',
+      description: 'Order description',
+      source: params[:stripeToken],
+    })
+
+    # Создание заказа после успешного платежа
+    create_order(params[:amount])
+
+    redirect_to root_path, notice: 'Thank you for your order!'
+  rescue Stripe::CardError => e
+    flash[:error] = e.message
+    redirect_to new_order_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
       @order = Order.find(params[:id])
     end
 
+    def create_order(amount)
+      order = current_user.orders.create(total_price: amount)
+    end
     # Only allow a list of trusted parameters through.
     def order_params
       params.require(:order).permit(:user_id, :total_price, :status)

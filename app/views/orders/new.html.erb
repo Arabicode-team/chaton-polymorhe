@@ -1,9 +1,50 @@
 <h1>New order</h1>
 
-<%= render "form", order: @order %>
+<div class="row">
+<%= form_with url: orders_charge_path, id: 'payment-form', class: 'form' do %>
+  <!-- Элементы Stripe будут вставлены здесь -->
+  <div id="card-element" class="form-group">
+    <!--Stripe.js injects the Card Element here-->
+  </div>
 
-<br>
+  <div class="form-group">
+    <%= hidden_field_tag :amount, @total_price %>
+  </div>
 
-<div>
-  <%= link_to "Back to orders", orders_path %>
+  <button id="submit-button" class="btn btn-primary">Submit Payment</button>
+<% end %>
 </div>
+<script type="text/javascript">
+var stripePublicKey = '<%= Rails.configuration.stripe[:publishable_key] %>'
+document.addEventListener('DOMContentLoaded', function () {
+  var stripe = Stripe(stripePublicKey);
+  var elements = stripe.elements();
+  
+  var card = elements.create('card');
+  card.mount('#card-element');
+
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function(result) {
+      if (result.error) {
+        console.log(result.error.message);
+      } else {
+        stripeTokenHandler(result.token);
+      }
+    });
+  });
+
+  function stripeTokenHandler(token) {
+    var form = document.getElementById('payment-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+
+    form.submit();
+  }
+});
+</script>
