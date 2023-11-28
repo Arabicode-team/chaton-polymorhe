@@ -1,0 +1,9 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @photo %>
+
+<div>
+  <%= form_with url: cart_add_to_path(cart_id: @cart.id, photo_id: @photo.id), method: :post do %>
+    <%= submit_tag "Add to cart" %>
+  <% end %>
+</div>

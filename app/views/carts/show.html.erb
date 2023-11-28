@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% if @cart.line_items.any? %>
+  <% @cart.line_items.each do |line_item| %>
+    <div>
+      <p><%= line_item.photo.title %>: <%= number_to_currency(line_item.price) %></p>
+      <%= button_to 'Remove', cart_remove_from_path(line_item_id: line_item.id), method: :delete %>
+      </div>
+  <% end %>
+
+  <div>
+    <%= link_to 'Checkout', new_order_path, method: :post %>
+  </div>
+<% else %>
+  <p>Your cart is empty.</p>
+<% end %>
