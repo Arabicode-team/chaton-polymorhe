@@ -71,3 +71,4 @@ end
 gem "devise"
 gem "dotenv-rails"
 gem "stripe"
+gem "administrate"

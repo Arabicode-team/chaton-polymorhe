@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  namespace :admin do
+      resources :carts
+      resources :line_items
+      resources :orders
+      resources :photos
+      resources :users
+
+      root to: "carts#index"
+    end
   root "photos#index"
   devise_for :users
   resources :line_items
@@ -18,4 +27,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  namespace :admin do
+    resources :users
+
+    root to: "users#index", as: :admin_dashboard
+  end
 end
