@@ -9,5 +9,17 @@
     <%= user.encrypted_password %>
   </p>
 
-
+  <h3>Your Orders</h3>
+  <% if @orders.any? %>
+    <ul>
+      <% @orders.each do |order| %>
+        <li>
+          Order ID: <%= order.id %> - Total Price: <%= number_to_currency(order.total_price) %>
+          <!-- Другие детали заказа по желанию -->
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>You have no orders yet.</p>
+  <% end %>
 </div>

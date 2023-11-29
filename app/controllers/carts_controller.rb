@@ -13,9 +13,10 @@ class CartsController < ApplicationController
   end
 
   def remove
+    @cart = current_user.cart || current_user.create_cart
     line_item = current_user.cart.line_items.find(params[:line_item_id])
     line_item.destroy
-    redirect_to cart_path, notice: 'Item was removed from your cart.'
+    redirect_to cart_path(@cart), notice: 'Item was removed from your cart.'
   end
   # before_action :set_cart, only: %i[ show edit update destroy ]
 

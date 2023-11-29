@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :line_items
   resources :orders
+  post 'orders/charge', to: 'orders#charge', as: :orders_charge
   resources :carts, only: [:show] do
     post 'add/:photo_id', to: 'carts#add', as: :add_to
     delete 'carts/remove/:line_item_id', to: 'carts#remove', as: :cart_remove_from
