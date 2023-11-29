@@ -46,7 +46,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_161116) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_carts_on_user_id", unique: true
+    t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
   create_table "line_items", force: :cascade do |t|
@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_161116) do
     t.string "title"
     t.text "description"
     t.decimal "price"
+    t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -86,6 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_161116) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "admin"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
