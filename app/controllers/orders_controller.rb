@@ -13,6 +13,7 @@ class OrdersController < ApplicationController
   # GET /orders/new
   def new
     @cart = current_user.cart
+    @order_items = @cart.line_items  # Добавьте эту строку
     @total_price = @cart.line_items.sum('price * quantity')
   end
 
@@ -74,7 +75,7 @@ class OrdersController < ApplicationController
     redirect_to root_path, notice: 'Thank you for your order!'
   rescue Stripe::CardError => e
     flash[:error] = e.message
-    redirect_to new_order_path
+    redirect_to new_order_path, notice: 'Something went wrong'
   end
 
   private

@@ -1,42 +1,72 @@
-<h1>New order</h1>
+<p style="color: green"><%= notice %></p>
 
-<div class="row">
-<%= form_with url: orders_charge_path, id: 'payment-form', class: 'form' do %>
-  <!-- Элементы Stripe будут вставлены здесь -->
-  <div id="card-element" class="form-group">
-    <!--Stripe.js injects the Card Element here-->
+
+<div class="row justify-content-center my-4">
+  <div class="col-md-6">
+    <h3 class="text-center">Your Order</h3>
+    <ul class="list-group">
+      <% @order_items.each do |item| %>
+        <li class="list-group-item">
+          <%= item.photo.title %> - <%= number_to_currency(item.price) %> x <%= item.quantity %>
+        </li>
+      <% end %>
+    </ul>
+    <p class="text-right mt-3">Total: <%= number_to_currency(@total_price) %></p>
   </div>
-
-  <div class="form-group">
-    <%= hidden_field_tag :amount, @total_price %>
-  </div>
-
-  <button id="submit-button" class="btn btn-primary">Submit Payment</button>
-<% end %>
 </div>
+
+<div class="card mx-auto my-4" style="width: 30rem;">
+  <div class="card-body">
+    <h1 class="card-title text-center">Checkout</h1>
+    <%= form_with url: orders_charge_path, id: 'payment-form' do %>
+      <div id="card-number-element" class="form-group border p-3"><!--Stripe.js injects the Card Number Element--></div>
+      <div id="card-expiry-element" class="form-group border p-3"><!--Stripe.js injects the Card Expiry Element--></div>
+      <div id="card-cvc-element" class="form-group border p-3"><!--Stripe.js injects the Card CVC Element--></div>
+      <div id="postal-code-element" class="form-group border p-3"><!--Stripe.js injects the Postal Code Element--></div>
+      <div class="form-group d-none"><%= hidden_field_tag :amount, @total_price %></div>
+      <button id="submit-button" class="btn btn-primary btn-block mt-4">Submit Payment</button>
+    <% end %>
+  </div>
+</div>
+
+
 <script type="text/javascript">
 var stripePublicKey = '<%= Rails.configuration.stripe[:publishable_key] %>'
 document.addEventListener('DOMContentLoaded', function () {
   var stripe = Stripe(stripePublicKey);
   var elements = stripe.elements();
-  
-  var card = elements.create('card');
-  card.mount('#card-element');
 
+  // Создание индивидуальных элементов
+  var cardNumber = elements.create('cardNumber');
+  cardNumber.mount('#card-number-element');
+
+  var cardExpiry = elements.create('cardExpiry');
+  cardExpiry.mount('#card-expiry-element');
+
+  var cardCvc = elements.create('cardCvc');
+  cardCvc.mount('#card-cvc-element');
+
+  var postalCode = elements.create('postalCode');
+  postalCode.mount('#postal-code-element');
+
+  // Обработка формы
   var form = document.getElementById('payment-form');
   form.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    stripe.createToken(card).then(function(result) {
+    stripe.createToken(cardNumber).then(function(result) {
       if (result.error) {
+        // Обработка ошибок при создании токена
         console.log(result.error.message);
       } else {
+        // Отправка токена на сервер
         stripeTokenHandler(result.token);
       }
     });
   });
 
   function stripeTokenHandler(token) {
+    // Вставка токена в форму и отправка формы
     var form = document.getElementById('payment-form');
     var hiddenInput = document.createElement('input');
     hiddenInput.setAttribute('type', 'hidden');
