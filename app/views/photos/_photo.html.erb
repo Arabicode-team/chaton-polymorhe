@@ -1,22 +1,28 @@
 <div id="<%= dom_id photo %>">
-  <p>
-    <strong>Title:</strong>
-    <%= photo.title %>
-  </p>
 
-  <p>
-    <strong>Description:</strong>
-    <%= photo.description %>
-  </p>
-
-  <p>
-    <strong>Price:</strong>
-    <%= photo.price %>
-  </p>
-
-  <p>
-    <strong>Image url:</strong>
-    <%= photo.image_url %>
-  </p>
-
-</div>
+<div class="col mt-3">
+    <div class="card card-blog card-plain">
+      <div class="position-relative">
+        <a class="d-block blur-shadow-image">
+        <% if photo.image.attached? %>
+          <%= image_tag photo.image, alt: "img-blur-shadow", class: "img-fluid shadow border-radius-lg" %>
+        <% else %>
+          <span>No image available</span>
+      <% end %>  
+        </a>
+      </div>
+      <div class="card-body px-1 pt-3">
+        <p class="text-gradient text-primary mb-2 text-sm">Entire Apartment • 2 Guests • 1 Bed</p>
+        <a href="javascript:;">
+          <h5>
+            <%= photo.title %>
+          </h5>
+        </a>
+        <p>
+          <%= photo.description %>
+        </p>
+        <h5 class="text-gradient text-primary mb-0"><%= photo.price %></h5>
+      </div>
+    </div>
+  </div>
+  </div>

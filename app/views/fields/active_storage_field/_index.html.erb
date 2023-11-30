@@ -1,0 +1,4 @@
+<!-- Пример отображения имени файла или URL -->
+<% if field.data.attached? %>
+  <%= link_to field.data.filename.to_s, rails_blob_path(field.data, disposition: "attachment") %>
+<% end %>

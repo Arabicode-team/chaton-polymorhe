@@ -15,6 +15,7 @@ class PhotosController < ApplicationController
   # GET /photos/new
   def new
     @photo = Photo.new
+    @photos.images.attach(params[:image])
   end
 
   # GET /photos/1/edit
