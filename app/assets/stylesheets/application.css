@@ -13,3 +13,46 @@
  *= require_tree .
  *= require_self
  */
+ * {
+  margin: 0;
+  padding: 0;
+ }
+ body {
+  font-family: 'Roboto', sans-serif;
+ }
+ .centered-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  border: 1.5px solid;
+  border-image-source: linear-gradient(310deg, rgb(121, 40, 202), rgb(255, 0, 128));
+  border-image-slice: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.centered-form h2,
+.centered-form label,
+.centered-form input,
+.centered-form .actions input[type="submit"] {
+  color: linear-gradient(310deg, rgb(121, 40, 202), rgb(255, 0, 128));
+  }
+  
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    margin-top: 70px;
+    width: 100%;
+    background: linear-gradient(310deg, rgb(121, 40, 202), rgb(255, 0, 128));
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 1;
+  }
+
+.photo {
+    margin-bottom: 90px;
+}
